@@ -1,0 +1,32 @@
+  image: 'maven:latest'
+
+#  array values
+  stages:
+  - test
+  - build
+  services:
+  - 'mongo:3.4-jessie'
+  variables:
+    MONGO_DATABASENAME: "muzixdb"
+    MONGO_URL: "mongodb://mongo/muzixdb"
+
+  cache:
+    paths:
+     - .m2/repository
+     -  target
+  maven-test:
+   stage: test
+   script: "mvn test"
+   tags:
+    - MYREPOS_PROD_RUNNER
+  maven-build:
+    stage: build
+    script: 'mvn package'
+    tags:
+    - MYREPOS_PROD_RUNNER
+
+    artifacts:
+      paths:
+        - target/*.jar
+
+
